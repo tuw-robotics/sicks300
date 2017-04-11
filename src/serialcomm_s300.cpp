@@ -75,6 +75,7 @@ SerialCommS300::~SerialCommS300() {
 
 int SerialCommS300::connect(const std::string &deviceName, unsigned int baudRate) {
 
+ // ROS_INFO("dev %s", deviceName.c_str());
   m_fd = ::open(deviceName.c_str(), O_RDWR | O_NOCTTY);
   if (m_fd < 0) {
     ROS_ERROR_STREAM("SerialCommS300: unable to open serial port " << deviceName);

@@ -93,6 +93,7 @@ protected:
 
   //! Send Transform or not
   bool send_transform_;
+  bool laser_scanner_inverted_;
 
   std::string device_name_;
   unsigned int baud_rate_;

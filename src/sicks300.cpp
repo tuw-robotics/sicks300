@@ -58,6 +58,8 @@ SickS300::SickS300() : param_node_("~"), nodeHandle_("/") {
   param_node_.param(std::string("tf_x"), x, 0.115);
   param_node_.param(std::string("tf_y"), y, 0.0);
   param_node_.param(std::string("tf_z"), z, 0.21);
+  
+  param_node_.param(std::string("invert_scan"), laser_scanner_inverted_, true);
 
   connect_cmd_ = param_node_.param<std::string>("connect_cmd", std::string());
 
@@ -89,7 +91,7 @@ SickS300::SickS300() : param_node_("~"), nodeHandle_("/") {
   connected_ = -1;
 
   // Reading device parameters
-  param_node_.param(std::string("devicename"), device_name_, std::string("/dev/sick300"));
+  param_node_.param(std::string("devicename"), device_name_, std::string("/dev/ttyUSB0"));
   baud_rate_ = (unsigned int) param_node_.param(std::string("baudrate"), 500000);
 
   scan_data_publisher_ = nodeHandle_.advertise<sensor_msgs::LaserScan>("laserscan", 10);
@@ -141,8 +143,10 @@ void SickS300::update() {
 
 void SickS300::broadcast_transform() {
   if (send_transform_) {
-    tf_broadcaster_.sendTransform(tf::StampedTransform(tf::Transform(tf::Quaternion(0, 0, 0, 1), transform_vector_),
-                                                       ros::Time::now(), "base_link", "base_laser_link"));
+    if(!laser_scanner_inverted_)
+      tf_broadcaster_.sendTransform(tf::StampedTransform(tf::Transform(tf::Quaternion(0, 0, 0, 1), transform_vector_), ros::Time::now(), "base_link", "base_laser_link"));
+    else
+      tf_broadcaster_.sendTransform(tf::StampedTransform(tf::Transform(tf::Quaternion(1, 0, 0, 0), transform_vector_), ros::Time::now(), "base_link", "base_laser_link"));
   }
 }
 
