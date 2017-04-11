@@ -1,0 +1,10 @@
+#sick300_driver:
+ devicename: "/dev/ttyUSB0"
+ baudrate: 38400
+ field_of_view: 240
+ tf_z: 0.21
+ tf_y: 0.0
+ tf_x: 0.115
+ send_transform: 1
+ frame: "base_laser_link"
+ scan_inverted: true

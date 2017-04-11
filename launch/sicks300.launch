@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+
+<launch>
+  <arg name="robot_name" default="p3dx" />
+  <arg name="scan" default="laser_front/scan" />
+  <arg name="cfg" default="UbuntuBenjamin"/>
+
+  <group ns="/$(arg robot_name)">
+    <node pkg="sicks300" type="sick300_driver" name="sicks300" output="screen"> 
+        <remap from="base_laser_link" to="$(arg scan)"/>
+        <rosparam file="$(find sicks300)/cfg/$(arg cfg)/sicks300.yaml" command="load" />
+    </node>
+  </group>
+</launch>
